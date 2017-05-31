@@ -5,25 +5,25 @@ package com.example.android.booklisting;
  */
 
 public class Book {
-    private int mImage;
+    //private Uri mImage;
     private String mTitle;
-    private String mAuthor;
+    //private String mAuthor;
 
-    public Book(int mImage, String mTitle, String mAuthor) {
-        this.mImage = mImage;
+    public Book(String mTitle) {
+        //this.mImage = mImage;
         this.mTitle = mTitle;
-        this.mAuthor = mAuthor;
+        //this.mAuthor = mAuthor;
     }
 
-    public int getmImage() {
+   /* public Uri getmImage() {
         return mImage;
-    }
+    }*/
 
     public String getmTitle() {
         return mTitle;
     }
 
-    public String getmAuthor() {
+    /*public String getmAuthor() {
         return mAuthor;
-    }
+    }*/
 }

@@ -2,8 +2,6 @@ package com.example.android.booklisting;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.SearchView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +36,7 @@ public final class QueryUtils {
         return url;
     }
 
-    public static String makeHttpRequest(URL url) throws IOException {
+    private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
         if (url == null) {
@@ -88,7 +86,6 @@ public final class QueryUtils {
         return output.toString();
     }
 
-   /* //TODO ir buscar dados no json
     private static List<Book> extractFeatureFromJson(String bookJSON) {
         if (TextUtils.isEmpty(bookJSON)) {
             return null;
@@ -99,18 +96,21 @@ public final class QueryUtils {
         try {
 
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
-            JSONArray earthquakeArray = baseJsonResponse.getJSONArray("features");
+            JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
-            for (int i = 0; i < earthquakeArray.length(); i++) {
-                JSONObject currentEarthquake = earthquakeArray.getJSONObject(i);
+            for (int i = 0; i < bookArray.length(); i++) {
+                JSONObject currentBook = bookArray.getJSONObject(i);
+                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                JSONObject properties = currentEarthquake.getJSONObject("properties");
-                double magnitude = properties.getDouble("mag");
-                String location = properties.getString("place");
-                long time = properties.getLong("time");
-                String url = properties.getString("url");
+                String title = volumeInfo.getString("title");
 
-                Book book = new Book();
+                //String authors = volumeInfo.getJSONArray("authors").toString();
+
+                /*JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                String image = imageLinks.getString("thumbnail");
+                Uri imageUri = Uri.parse(image);*/
+
+                Book book = new Book(title);
                 books.add(book);
             }
 
@@ -120,7 +120,7 @@ public final class QueryUtils {
         return books;
     }
 
-    public static List<Book> fetchEarthquakeData(String requestUrl) {
+    public static List<Book> fetchBookData(String requestUrl) {
 
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
@@ -133,6 +133,6 @@ public final class QueryUtils {
 
         List<Book> books = extractFeatureFromJson(jsonResponse);
         return books;
-    }*/
+    }
 
 }

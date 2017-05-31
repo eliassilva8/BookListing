@@ -24,7 +24,7 @@
 
     <ImageView
         android:id="@+id/book_image_view"
-        android:layout_width="@dimen/list_item_height"
+        android:layout_width="@dimen/list_item_width"
         android:layout_height="@dimen/list_item_height"
         android:layout_gravity="center"
         tools:src="@mipmap/ic_launcher"/>

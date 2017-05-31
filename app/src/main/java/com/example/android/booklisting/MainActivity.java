@@ -2,26 +2,22 @@ package com.example.android.booklisting;
 
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.booklisting.QueryUtils.createUrl;
-
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    BookAdapter mAdapter;
-    TextView mEmptyTextView;
+    private BookAdapter mAdapter;
+    private TextView mEmptyTextView;
+    private static final String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=android";
+    private String userInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mAdapter = new BookAdapter(this, new ArrayList<Book>());
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
+        final ListView listView = (ListView) findViewById(R.id.list_view);
         mEmptyTextView = (TextView) findViewById(R.id.empty_view);
         listView.setEmptyView(mEmptyTextView);
 
@@ -44,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public boolean onQueryTextSubmit(String query) {
                 loaderManager.initLoader(1, null, MainActivity.this);
+                userInput = query;
                 return true;
             }
 
@@ -56,19 +53,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        return new BookLoader(this);
+        return new BookLoader(this, REQUEST_URL);
     }
 
 
     //TODO concluir metodo
     @Override
-    public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
+    public void onLoadFinished(Loader<List<Book>> loader, List<Book> books) {
         View progressView = findViewById(R.id.progress_view);
         progressView.setVisibility(View.GONE);
 
         mEmptyTextView.setText(R.string.no_books);
 
         mAdapter.clear();
+
+        if (books != null && !books.isEmpty()) {
+            mAdapter.addAll(books);
+        }
     }
 
     @Override
