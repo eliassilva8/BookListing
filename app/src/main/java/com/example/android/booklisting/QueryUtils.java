@@ -106,7 +106,10 @@ public final class QueryUtils {
 
                 String title = volumeInfo.getString("title");
 
-                JSONArray authors = volumeInfo.getJSONArray("authors");
+                JSONArray authors = null;
+                if (volumeInfo.getJSONArray("authors").length() != 0) {
+                    authors = volumeInfo.getJSONArray("authors");
+                }
 
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                 String imageUrl = imageLinks.getString("thumbnail");
