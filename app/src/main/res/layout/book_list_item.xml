@@ -19,7 +19,7 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:minHeight="@dimen/list_item_height"
+    android:minHeight="@dimen/list_layout_height"
     android:layout_margin="16dp">
 
     <ImageView

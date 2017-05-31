@@ -1,5 +1,7 @@
 package com.example.android.booklisting;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -104,18 +106,23 @@ public final class QueryUtils {
 
                 String title = volumeInfo.getString("title");
 
-                //String authors = volumeInfo.getJSONArray("authors").toString();
+                JSONArray authors = volumeInfo.getJSONArray("authors");
 
-                /*JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String image = imageLinks.getString("thumbnail");
-                Uri imageUri = Uri.parse(image);*/
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                String imageUrl = imageLinks.getString("thumbnail");
+                InputStream in = new java.net.URL(imageUrl).openStream();
+                Bitmap imageBitmap = BitmapFactory.decodeStream(in);
 
-                Book book = new Book(title);
+                Book book = new Book(title, authors, imageBitmap);
                 books.add(book);
             }
 
         } catch (JSONException e) {
             Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return books;
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="list_layout_height">54dp</dimen>
     <dimen name="list_item_height">46dp</dimen>
     <dimen name="list_item_width">32dp</dimen>
 </resources>
