@@ -17,14 +17,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
+    private static final String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+    private static final int BOOK_LOADER_ID = 1;
     private BookAdapter mAdapter;
     private TextView mEmptyTextView;
-    private static final String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private String userInput;
     private View progressView;
-    private static final int BOOK_LOADER_ID = 1;
     private LoaderManager loaderManager;
-
+    private NetworkInfo networkInfo;
+    private ConnectivityManager connMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +38,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mEmptyTextView = (TextView) findViewById(R.id.empty_view);
         listView.setEmptyView(mEmptyTextView);
+        mEmptyTextView.setText(R.string.open_view);
 
         progressView = findViewById(R.id.progress_view);
         progressView.setVisibility(View.GONE);
 
         listView.setAdapter(mAdapter);
 
-        ConnectivityManager connMgr = (ConnectivityManager)
+        connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            loaderManager = getLoaderManager();
-        } else {
-            View loadingIndicator = findViewById(R.id.progress_view);
-            loadingIndicator.setVisibility(View.GONE);
+        networkInfo = connMgr.getActiveNetworkInfo();
+        if (!(networkInfo != null && networkInfo.isConnected())) {
             mEmptyTextView.setText(R.string.no_internet_connection);
         }
 
@@ -59,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mAdapter.clear();
                 userInput = query;
-                loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
-                progressView.setVisibility(View.VISIBLE);
+                connectivityManager();
                 return true;
             }
 
@@ -93,5 +91,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
         mAdapter.clear();
+    }
+
+    private void connectivityManager() {
+        networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            loaderManager = getLoaderManager();
+            loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+            progressView.setVisibility(View.VISIBLE);
+        } else {
+            progressView.setVisibility(View.GONE);
+            mEmptyTextView.setText(R.string.no_internet_connection);
+        }
     }
 }

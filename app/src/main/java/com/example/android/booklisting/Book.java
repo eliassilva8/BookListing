@@ -13,14 +13,14 @@ public class Book {
     private String mTitle;
     private JSONArray mAuthor;
 
-    public Bitmap getmImage() {
-        return mImage;
-    }
-
     public Book(String mTitle, JSONArray mAuthor, Bitmap mImage) {
         this.mImage = mImage;
         this.mTitle = mTitle;
         this.mAuthor = mAuthor;
+    }
+
+    public Bitmap getmImage() {
+        return mImage;
     }
 
     public String getmTitle() {
