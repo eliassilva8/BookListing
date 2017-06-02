@@ -17,7 +17,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Book>> {
 
-    private static final String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private static final int BOOK_LOADER_ID = 1;
     private BookAdapter mAdapter;
     private TextView mEmptyTextView;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        return new BookLoader(this, REQUEST_URL + userInput);
+        return new BookLoader(this, userInput);
     }
 
     @Override

@@ -104,15 +104,12 @@ public final class QueryUtils {
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                String title = volumeInfo.getString("title");
+                String title = volumeInfo.optString("title");
 
-                JSONArray authors = null;
-                if (volumeInfo.getJSONArray("authors").length() != 0) {
-                    authors = volumeInfo.getJSONArray("authors");
-                }
+                JSONArray authors = volumeInfo.optJSONArray("authors");
 
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String imageUrl = imageLinks.getString("thumbnail");
+                String imageUrl = imageLinks.optString("thumbnail");
                 InputStream in = new java.net.URL(imageUrl).openStream();
                 Bitmap imageBitmap = BitmapFactory.decodeStream(in);
 

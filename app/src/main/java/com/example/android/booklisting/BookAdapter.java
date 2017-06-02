@@ -28,28 +28,40 @@ public class BookAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+        ViewHolderItem viewHolder;
+
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.book_list_item, parent, false);
+
+            viewHolder = new ViewHolderItem();
+            viewHolder.bookImage = (ImageView) listItemView.findViewById(R.id.book_image_view);
+            viewHolder.bookTitle = (TextView) listItemView.findViewById(R.id.book_title_view);
+            viewHolder.bookAuthor = (TextView) listItemView.findViewById(R.id.book_author_view);
+
+            listItemView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolderItem) listItemView.getTag();
         }
 
         Book currentBook = getItem(position);
 
+        viewHolder.bookImage.setImageBitmap(currentBook.getmImage());
 
-        ImageView bookImage = (ImageView) listItemView.findViewById(R.id.book_image_view);
-        bookImage.setImageBitmap(currentBook.getmImage());
+        viewHolder.bookTitle.setText(currentBook.getmTitle());
 
-        TextView bookTitle = (TextView) listItemView.findViewById(R.id.book_title_view);
-        bookTitle.setText(currentBook.getmTitle());
-
-        TextView bookAuthor = (TextView) listItemView.findViewById(R.id.book_author_view);
         try {
-            bookAuthor.setText(currentBook.getmAuthor().join("; ").replace("\"", ""));
+            viewHolder.bookAuthor.setText(currentBook.getmAuthor().join("; ").replace("\"", ""));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return listItemView;
+    }
+
+    static class ViewHolderItem {
+        ImageView bookImage;
+        TextView bookTitle;
+        TextView bookAuthor;
     }
 }

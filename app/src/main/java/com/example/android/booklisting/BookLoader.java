@@ -11,12 +11,12 @@ import java.util.List;
 
 public class BookLoader extends AsyncTaskLoader<List<Book>> {
 
-    private static final String LOG_TAG = BookLoader.class.getName();
-    private String mUrl;
+    private static final String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
+    private String mUserInput;
 
-    public BookLoader(Context context, String url) {
+    public BookLoader(Context context, String userInput) {
         super(context);
-        mUrl = url;
+        mUserInput = userInput;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
     @Override
     public List<Book> loadInBackground() {
 
-        List<Book> books = QueryUtils.fetchBookData(mUrl);
+        List<Book> books = QueryUtils.fetchBookData(REQUEST_URL + mUserInput);
         return books;
     }
 }
